@@ -10,43 +10,108 @@ var connection = mysql.createConnection({
 	'database' : 'trus',
 });
 
-router.post('/', function(req, res, next) {
+//get users list
+// router.post('/', function(req, res, next) {
+  
+// 	connection.query('select * from user;', function (error, rows) {
+// 		res.json(rows);
+// 	});
+// });
+
+//sign-in : get a user id
+router.post('/login', function(req, res, next) {
     
-    res.json({
-        post : "success"
-    });
-
-    connection.query('insert into user(id, password) values (?, ?);', [req.body.id, req.body.password], function (error, info) {
-
-            if (error == null) {
-
-                    connection.query('select * from board_table where id=?;', [info.insertId], function (error, cursor) {
-
-                            if (cursor.length > 0) {
-
-                                    var result = cursor[0];
-
-                                    res.json({
-                                            result : true,
-                                            id : result.id,
-                                            password : result.password,
-                                    });
-                            }
-                            else {
-
-                                    res.status(503).json({
+	connection.query('select * from user where userid=?;', [req.body.userid], function (error, row) {
+        
+        if(error==null){
                     
-                                        result : false,
-                                        reason : "Cannot post article"
-                                    });
-                            }
+            if(row.length>0){
+                var user = row[0];
+                if (user.password == req.body.password) {
+                    res.json({
+                        result : "success",
+                        userid : user.userid,
+                        username : user.username,
+                        phone : user.phone,
+                        gender : user.gender,
+                        birthday : user.birthday
+                    })
+                } 
+                else {
+                    res.status(202).json({            
+                        result : "fail",
+                        reason : "wrong password"
                     });
+                }
             }
             else {
-
-                    res.status(503).json(error);
+                res.status(202).json({            
+                    result : "fail",
+                    reason : "wrong userid"
+                });
             }
+            
+        } else {
+            res.status(503).json({    
+                result : "fail",
+                reason : error
+            });
+        }
+        
     });
 });
+
+//check id duplication
+router.post('/checkid', function(req, res, next) {
+    connection.query('select * from user where userid=?;', [req.body.userid], function (error, row) {
+        
+        if (error == null) {
+
+            //if there is no same id
+            if (row.length == 0) {
+                res.json({
+                    result : "success"
+                });
+            }
+            
+            //else if there is same id
+            else {
+                res.status(202).json({
+                    result : "fail",     
+                    reason : "duplicated"
+                });
+            }
+            
+        } else {
+            res.status(503).json({    
+                result : "fail",
+                reason : error
+            });
+        }
+    });
+});
+
+//join : a new user
+router.post('/join', function(req, res, next) {
+   
+    connection.query('insert into user(userid, password, username, phone, gender, birthday) values (?, ?, ?, ?, ?, ?);', 
+        [req.body.userid, req.body.password, req.body.username, req.body.phone, req.body.gender, req.body.birthday], function (error, info) {
+ 
+        if (error == null) {
+            
+            res.json({
+                result : "success"
+            });
+        }
+        
+        else {
+            res.status(503).json({    
+                result : "fail",
+                reason : error
+            });
+        }     
+    });
+});
+
 
 module.exports = router;

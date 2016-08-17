@@ -4,7 +4,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 
 var users = require('./routes/users');
-var schdules = require('./routes/schdules');
+var buses = require('./routes/buses');
 
 var app = express();
 
@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', users);
-app.use('/schdules', schdules);
+app.use('/buses', buses);
 
 
 // catch 404 and forward to error handler

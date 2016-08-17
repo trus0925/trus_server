@@ -1,0 +1,29 @@
+var express = require('express');
+var mysql = require('mysql');
+
+var router = express.Router();
+var connection = mysql.createConnection({
+
+	'host' : '127.0.0.1',
+	'user' : 'user',
+	'password' : 'password', 
+	'database' : 'trus',
+});
+
+router.get('/', function(req, res, next) {
+    
+    connection.query('select * from bus order by starttime asc;', function (error, rows) {
+		res.json({
+            result : "success",
+            buses : rows
+        });
+        
+	});
+  
+	// connection.query('select title, timestamp from schedule order by timestamp desc;', function (error, cursor) {
+		
+	// 	res.json(cursor);
+	// });
+});
+
+module.exports = router;
