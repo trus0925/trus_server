@@ -36,15 +36,13 @@ router.post('/login', function(req, res, next) {
                         gender : user.gender,
                         birthday : user.birthday
                     })
-                } 
-                else {
+                } else {
                     res.status(202).json({            
                         result : "fail",
                         reason : "wrong password"
                     });
                 }
-            }
-            else {
+            } else {
                 res.status(202).json({            
                     result : "fail",
                     reason : "wrong userid"
@@ -112,6 +110,75 @@ router.post('/join', function(req, res, next) {
         }     
     });
 });
+
+router.post('/findid', function (req, res, next) {
+    
+    connection.query('select userid from user where username=? AND phone=? AND birth=?', 
+                        [req.body.username, req.body.phone, req.body.birth], function (error, row) {
+        
+        if (error == null) {
+            
+            if(row.length>0){
+                res.json({
+                    result : "success",
+                    userid : row[0].userid
+                });
+            }
+            
+            //no matches user
+            else {
+                res.status(202).json({            
+                    result : "fail",
+                    reason : "wrong info"
+                });
+            }
+            
+        } 
+        
+        else {
+            res.status(503).json({    
+                result : "fail",
+                reason : error
+            });
+        }
+        
+    });
+});
+
+router.post('/findpw', function (req, res, next) {
+    
+    connection.query('select password from user where userid=? AND username=? AND phone=? AND birth=?;', 
+                        [req.body.userid, req.body.username, req.body.phone, req.body.birth], function (error, row) {
+        
+        if (error == null) {
+            
+            if(row.length>0){
+                res.json({
+                    result : "success",
+                    userid : row[0].password
+                });
+            }
+            
+            //no matches user
+            else {
+                res.status(202).json({            
+                    result : "fail",
+                    reason : "wrong info"
+                });
+            }
+            
+        } 
+        
+        else {
+            res.status(503).json({    
+                result : "fail",
+                reason : error
+            });
+        }
+        
+    });
+});
+
 
 
 module.exports = router;
