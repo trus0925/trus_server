@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
 
 router.get('/', function(req, res, next) {
     
-    connection.query('select * from bus order by starttime asc;', function (error, rows) {
+    connection.query('select * from bus order by tripdate asc;', function (error, rows) {
 		res.json({
             result : "success",
             buses : rows
