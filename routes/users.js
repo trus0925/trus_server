@@ -92,8 +92,8 @@ router.post('/checkid', function(req, res, next) {
 //join : a new user
 router.post('/join', function(req, res, next) {
    
-    connection.query('insert into user(userid, password, username, phone, gender, birthday) values (?, ?, ?, ?, ?, ?);', 
-        [req.body.userid, req.body.password, req.body.username, req.body.phone, req.body.gender, req.body.birthday], function (error, info) {
+    connection.query('insert into user(userid, password, username, phone, gender, birth) values (?, ?, ?, ?, ?, ?);', 
+        [req.body.userid, req.body.password, req.body.username, req.body.phone, req.body.gender, req.body.birth], function (error, info) {
  
         if (error == null) {
             
