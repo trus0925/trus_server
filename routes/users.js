@@ -155,11 +155,7 @@ router.post('/findpw', function (req, res, next) {
             if(row.length>0){
                 res.json({
                     result : "success",
-<<<<<<< HEAD
                     password : row[0].password
-=======
-                    userid : row[0].password
->>>>>>> origin/master
                 });
             }
             
