@@ -12,18 +12,15 @@ var connection = mysql.createConnection({
 
 router.get('/', function(req, res, next) {
     
-    connection.query('select * from bus order by starttime asc;', function (error, rows) {
+    // connection.query('select num, departure, arrival, tripdate, starttime, endtime, totalcount, fee, IF(isavailable,"true","false") as isavailable from bus order by tripdate asc;', function (error, rows) {
+    connection.query('select * from bus order by tripdate asc;', function (error, rows) {
+        
 		res.json({
             result : "success",
             buses : rows
         });
         
 	});
-  
-	// connection.query('select title, timestamp from schedule order by timestamp desc;', function (error, cursor) {
-		
-	// 	res.json(cursor);
-	// });
 });
 
 module.exports = router;
