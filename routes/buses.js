@@ -19,8 +19,7 @@ router.get('/', function(req, res, next) {
             result : "success",
             buses : rows
         });
-        
-	});
+    });
 });
 
 module.exports = router;
