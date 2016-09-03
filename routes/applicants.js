@@ -33,43 +33,14 @@ router.post('/', function(req, res, next) {
 });
 
 router.post('/ticket', function(req, res, next) {
-    connection.query('select * from applicant where user_userid=?;', [req.body.user_userid], function (error, row) {
+    connection.query('select bus_num, departureplace, departuretime, applycount, applytime, IF(isdeposit,"true","false") AS isdeposit, IF(isboarding,"true","false") AS isboarding from applicant where user_userid=?;', [req.body.user_userid], function (error, rows) {
      
         if (error == null) {
             
-            if(row.length>0){
-                var applicant = row[0];
-                
-                connection.query('select * from bus where num=?;', [applicant.bus_num], function (error, row) {
-                    
-                    if(error == null){
-                        
-                        if(row.length>0){
-                            var bus = row[0];
-                            
-                            res.json({
-                                result : "success",
-                                departureplace : applicant.departureplace,
-                                departuretime : applicant.departuretime,
-                                applycount : applicant.applycount,
-                                applytime : applicant.applytime,
-                                bus_tripdate : bus.tripdate,
-                                bus_arrival : bus.arrival,
-                                bus_endtime : bus.endtime,
-                                bus_totalcount : bus.totalcount,
-                                bus_fee : bus.fee,
-                                bus_isavailable : bus.isavailable,
-                                isdeposit : applicant.isdeposit,
-                                isboarding : applicant.isboarding
-                            });
-                        }
-                        
-                    } else {
-                        res.status(503).json({    
-                            result : "fail",
-                            reason : error
-                        });
-                    }
+            if(rows.length>0){
+                res.json({
+                    result : "success",
+                    applicant : rows
                 });
             }
             
