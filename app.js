@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var users = require('./routes/users');
 var buses = require('./routes/buses');
 var applicants = require('./routes/applicants');
+var qrcode = require('./routes/qrcode');
 
 var app = express();
 
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/users', users);
 app.use('/buses', buses);
 app.use('/applicants', applicants);
+app.use('/qrcode', qrcode);
 
 
 // catch 404 and forward to error handler
